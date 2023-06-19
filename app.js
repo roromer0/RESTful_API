@@ -1,22 +1,48 @@
-//Primero cargamos el módulo http en el servidor, encargado de gestionarlo los enpoints
+//Asi es para crear nuestro backed, la initial config 
+//Ahora vamos a instalar express, que es un framework de node que nos facilita la creación de servidores
 
-// npm install --save-dev nodemon
+const express = require('express');
+const mongoose = require('mongoose');
 
-const http = require("http");
-
-//2o declaramos el puerto en el que vamos a lanzar nuestro servidor
 const PORT = 8000;
 
-//3o creamos los "clientes"
-const server = http.createServer(
-  //req: request, contiene los detalles de la solicitud
-  //res: response, contiene los detalles de la respuesta, es la información que se envía al cliente
-  (req, res) => {
-    //4o escribimos la respuesta que queremos que nos devuelva el servidor
-    res.statusCode = 200; //200 es el código de estado que indica que la solicitud se ha realizado correctamente
-    res.setHeader("Content-Type", "text/html"); //indicamos el formato del contenido que vamos a devolver
-    res.end("<h1>Hello World!</h1></br><h2>Pepe tiene un servidor</h2>"); //finalizamos la respuesta
-  }
-).listen(PORT,()=>{
-    console.log(`Server running at http://localhost:${PORT}`);
+//Así creamos la apliación de express
+const app = express();
+
+//Analiza los archivos JSON
+app.use(express.json());
+
+//Esto nos permite obtener la información de configuracion de .env
+require('dotenv').config();
+
+//Obtenemos la cadena de conexion a la base de datos desde las variables de entorno (fichero .env)
+const mongoURL=process.env.DATABASE_URL_DEV;
+
+//Configuracion con mongodb
+//useNewUrlParsere le indica amongoose que utilice el nuevo analizador de url de la cadena de conexion
+mongoose.connect(mongoURL,{useNewUrlParser:true});
+
+//Guardar conexion con mongoose
+const db = mongoose.connection;
+
+
+//Verificamos que la conexion se ha realizado correctamente, de lo contrario nos muestra el error
+db.on('error',(error)=>{
+    console.error('Error: ',error)
+});
+
+
+//Nos indica que se ha realizado la conexion correctamente
+db.once('connected',()=>{
+    console.log('Succes connect');
 })
+
+//Nos indica que se ha desconectado de la base de datos
+db.on('disconnected',()=>{
+    console.log('Mongoose connection is disconnected');
+})
+
+
+app.listen(PORT,()=>{
+    console.log(`Server running at http://localhost:${PORT}`)
+});
