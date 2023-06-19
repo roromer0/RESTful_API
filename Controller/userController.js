@@ -26,6 +26,6 @@ router.delete('/',(req,res)=>{
 
 //Actualizar un usuario
 router.patch('/:id',(req,res)=>{
-    res.send(`Pach user ${req.params.id}`)
+    res.send(`Patch user ${req.params.id}`)
 })
 module.exports = router;
