@@ -42,6 +42,8 @@ db.on('disconnected',()=>{
     console.log('Mongoose connection is disconnected');
 })
 
+const users = require('./Controller/userController');
+app.use('/users',users);
 
 app.listen(PORT,()=>{
     console.log(`Server running at http://localhost:${PORT}`)
