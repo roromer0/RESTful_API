@@ -10,18 +10,19 @@ const userSchema = new Schema({
     type: Array,
     required: true,
     default: [],
-  
+
     validate: [
-        object.length === 0 ||
-          object.every((element) => {
-            const keys = Object.keys(element);
-            return (
-              keys.every((keys) => typeof element[keys[0]] === "string") &&
-              typeof element[keys[1]] === "string"
-            )
-          }),
-        "Not a valid personality",
-      ]
+      (array) =>
+        array.length === 0 ||
+        array.every((element) => {
+          const keys = Object.keys(element);
+          return (
+            keys.every(() => typeof element[keys[0]] === "boolean") &&
+            typeof element[keys[1]] === "string"
+          );
+        }),
+      "Wrong skills array",
+    ],
   },
   personality: {
     type: Object,
@@ -32,9 +33,11 @@ const userSchema = new Schema({
         Object.values(obj).every((element) => typeof element === "string"),
       "Wrong personality object",
     ],
-<<<<<<< HEAD
   },
 });
-=======
-  },});
->>>>>>> e097c4c (ea)
+//EL primer parametro es el nombre del modelo
+//El segundo parametro
+//El tercer parametro es el nombre de la coleccion de nuestra base de datos.
+const User = mongoose.model("User", userSchema, "users");
+
+module.exports = User;
