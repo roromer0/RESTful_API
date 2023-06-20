@@ -25,7 +25,11 @@ const userSchema = new Schema({
   personality: {
     type: Object,
     required: true,
-    default: {},
-    validate: Object.keys === 2,
+    validate: [
+      (obj) =>
+        obj.constructor === Object &&
+        Object.values(obj).every((element) => typeof element === "string"),
+      "Wrong personality object",
+    ],
   },
 });
