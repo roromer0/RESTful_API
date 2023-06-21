@@ -6,8 +6,10 @@ const router = express.Router();
 //Importamos el modelo userModel
 const User = require("../Model/userModel");
 
+const verifyToken = require("../lib/utils");
+
 //Get, Obtener todos los usuarios
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const data = await User.find();
     res.status(200).json({ status: "succeeded", data, error: null });

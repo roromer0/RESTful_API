@@ -5,6 +5,7 @@ const router = express.Router();
 //Importamos el modelo Login
 const Login = require("../Model/loginModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -39,7 +40,24 @@ router.post("/login", async (req, res) => {
         user.password
       );
       if (validatePassword) {
-        res.status(200).json({ status: "Succeded", user: user, error: null });
+        const token = await jwt.sign(
+          { email: user.email, role: user.role },
+          process.env.TOKEN_SECRET,
+          { expiresIn: "4min" }
+        );
+
+        res.status(200).json({
+          status: "Succeded",
+          user: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            token: token,
+          },
+          error: null,
+        });
+
+        //TODO: Generar token
       } else {
         res.status(400).json({
           status: "Failed",

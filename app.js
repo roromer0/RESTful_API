@@ -42,8 +42,10 @@ db.on("disconnected", () => {
 
 const products = require("./Controller/productController");
 const auth = require("./Controller/loginController");
+const user = require("./Controller/userController");
 app.use("/products", products);
 app.use("/auth", auth);
+app.use("/users", user);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
