@@ -6,7 +6,7 @@ const router = express.Router();
 //Importamos el modelo userModel
 const User = require("../Model/userModel");
 
-const verifyToken = require("../lib/utils");
+const { verifyToken } = require("../lib/utils");
 
 //Get, Obtener todos los usuarios
 router.get("/", verifyToken, async (req, res) => {
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     });
     await data.save();
     res.status(200).json({ status: "succeeded", data, error: null });
-  } catch {
+  } catch (error) {
     res
       .status(404)
       .json({ status: "Failed", data: null, error: error.message });

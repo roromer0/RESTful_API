@@ -7,6 +7,12 @@ const hash = crypto
   .update("Me gustan los perritos 99")
   .digest("hex");
 
-console.log(hash);
+// console.log(hash);
 
-// c1e31d06ad010bb06a3f765970ae1c65eb805498ee0062c46f6f96f2171a8d71
+const secretRefresh = "ordenar2";
+
+const hashRefresh = crypto
+  .createHmac("sha256", secretRefresh)
+  .update("Me gustan los camperos 99")
+  .digest("hex");
+console.log(hashRefresh);
